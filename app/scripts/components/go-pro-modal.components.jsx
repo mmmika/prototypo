@@ -3,16 +3,13 @@ import React from 'react';
 import LocalClient from '../stores/local-client.stores.jsx';
 import Log from '../services/log.services.js';
 
+import withCountry from './shared/with-country.components';
 import Modal from './shared/modal.components.jsx';
 import Price from './shared/price.components.jsx';
 
-export default class GoProModal extends React.PureComponent {
+class GoProModal extends React.PureComponent {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			country: 'US',
-		};
 
 		this.goSubscribe = this.goSubscribe.bind(this);
 		this.goCredits = this.goCredits.bind(this);
@@ -20,13 +17,6 @@ export default class GoProModal extends React.PureComponent {
 
 	componentWillMount() {
 		this.client = LocalClient.instance();
-	}
-
-	async componentDidMount() {
-		const response = await fetch('//freegeoip.net/json/');
-		const data = await response.json();
-
-		this.setState({country: data.country_code});
 	}
 
 	goSubscribe() {
@@ -46,7 +36,7 @@ export default class GoProModal extends React.PureComponent {
 	}
 
 	render() {
-		const {country} = this.state;
+		const {country} = this.props;
 
 		return (
 			<Modal propName={this.props.propName}>
@@ -82,3 +72,5 @@ export default class GoProModal extends React.PureComponent {
 		);
 	}
 }
+
+export default withCountry(GoProModal);
